@@ -28,7 +28,7 @@
 
     for (var i = 0; i < drops.length; i++) {
       var text = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      //ctx.fillText(text, i * fontSize, drops[i] * fontSize);
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
