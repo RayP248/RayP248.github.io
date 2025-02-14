@@ -39,7 +39,6 @@ header {
     text-align: center;
     padding: 40px 20px;
     color: #333;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Ctext x='0' y='40' font-size='20' fill='%23e0e0e0'%3E0101010101010101%3C/text%3E%3C/svg%3E");
     background-repeat: repeat;
 }
 

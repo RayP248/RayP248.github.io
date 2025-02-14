@@ -16,7 +16,7 @@
   var columns = canvas.width / fontSize;
   var drops = [];
   for (var x = 0; x < columns; x++) {
-    //drops[x] = 1;
+    drops[x] = 1;
   }
 
   /* Draw function */
@@ -28,7 +28,7 @@
 
     for (var i = 0; i < drops.length; i++) {
       var text = chars[Math.floor(Math.random() * chars.length)];
-      //ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
