@@ -49,4 +49,9 @@
       drops[x] = 1;
     }
   });
+
+  // Hide preloader once canvas is ready
+  window.addEventListener("load", function () {
+    document.getElementById("preloader").style.display = "none";
+  });
 })();
