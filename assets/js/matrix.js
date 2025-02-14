@@ -10,8 +10,7 @@
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   /* Create characters set */
-  var chars = "01";
-  chars = chars.split("");
+  var chars = "01".split("");
 
   var fontSize = 16;
   var columns = canvas.width / fontSize;
@@ -52,6 +51,8 @@
 
   // Hide preloader once canvas is ready
   window.addEventListener("load", function () {
-    document.getElementById("preloader").style.display = "none";
+    setTimeout(function () {
+      document.getElementById("preloader").style.display = "none";
+    }, 500); // Delay to ensure canvas is fully ready
   });
 })();
