@@ -16,7 +16,7 @@
   var columns = canvas.width / fontSize;
   var drops = [];
   for (var x = 0; x < columns; x++) {
-    drops[x] = 1;
+    //drops[x] = 1;
   }
 
   /* Draw function */
