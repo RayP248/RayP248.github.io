@@ -31,6 +31,11 @@ header {
     background-repeat: repeat;
 }
 
+.container {
+    position: relative;
+    z-index: 1;
+}
+
 #projects {
     display: flex;
     flex-wrap: wrap;
