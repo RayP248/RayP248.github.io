@@ -12,7 +12,7 @@
   /* Create characters set */
   var chars = "01".split("");
 
-  var fontSize = 16;
+  var fontSize = 20; // Increase font size to reduce number of drops
   var columns = canvas.width / fontSize;
   var drops = [];
   for (var x = 0; x < columns; x++) {
@@ -28,15 +28,20 @@
 
     for (var i = 0; i < drops.length; i++) {
       var text = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      var x = i * fontSize;
+      var y = drops[i] * fontSize;
+
+      // Draw the character
+      ctx.fillText(text, x, y);
+
+      if (y > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
       drops[i]++;
     }
   }
 
-  setInterval(draw, 33);
+  setInterval(draw, 100); // Increase interval to reduce CPU usage
 
   /* Responsive canvas */
   window.addEventListener("resize", function () {

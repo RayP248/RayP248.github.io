@@ -5,11 +5,6 @@ body {
     padding: 0;
 }
 
-@font-face {
-    font-family: 'Experimento';
-    src: url('../fonts/Experimento.ttf') format('truetype');
-}
-
 /* Preloader styles */
 #preloader {
     position: fixed;
@@ -50,6 +45,7 @@ header {
 .container {
     position: relative;
     z-index: 1;
+    overflow: hidden;
 }
 
 #projects {
