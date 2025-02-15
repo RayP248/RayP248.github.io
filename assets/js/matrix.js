@@ -9,7 +9,7 @@
 
   var chars = "01".split("");
 
-  var fontSize = 20;
+  var fontSize = 24; // Increase font size to reduce number of drops
   var columns = canvas.width / fontSize;
   var drops = [];
   for (var x = 0; x < columns; x++) {
@@ -36,7 +36,7 @@
     }
   }
 
-  setInterval(draw, 100);
+  setInterval(draw, 150);
 
   window.addEventListener("resize", function () {
     canvas.width = window.innerWidth;
