@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: #000;
@@ -47,10 +51,15 @@ header {
 }
 
 #projects {
-    display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding: 20px;
+}
+
+#project-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .project-card {
@@ -62,14 +71,24 @@ header {
     width: 300px;
     box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.1);
     color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
 }
 
 .project-card h2 {
-    margin-top: 0;
+    font-size: 1.5em;
+    margin: 0;
 }
 
 .dropdown-menu {
     z-index: 1001;
     background: #333;
+    color: #fff;
+}
+
+section {
     color: #fff;
 }

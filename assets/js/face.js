@@ -1,8 +1,8 @@
 (function () {
+  // Canvas initialization and global variables
   var canvas = document.getElementById("face");
   var ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  initCanvas();
 
   var faceX = canvas.width / 2;
   var faceY = canvas.height / 2;
@@ -20,28 +20,44 @@
   var targetCurve = 40;
   // Bubble flag for confused face
   var showBubble = false;
+  // Global mouse coordinates, starting at face center.
+  var mouseX = faceX,
+    mouseY = faceY;
 
   // In drawFace(), handle the "closed" state explicitly.
-  function drawFace(mouseX, mouseY) {
+  function drawFace(x, y) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw face circle
+    drawFaceCircle();
+    var angles = calculateEyeAngles(x, y);
+    drawEyes();
+    drawPupils(angles.left, angles.right);
+    drawMouth();
+    if (showBubble) drawBubble();
+  }
+
+  function drawFaceCircle() {
     ctx.fillStyle = "#FFD700";
     ctx.beginPath();
     ctx.arc(faceX, faceY, faceRadius, 0, Math.PI * 2);
     ctx.fill();
+  }
 
-    // Calculate eye positions
-    var angleLeftEye = Math.atan2(mouseY - (faceY - eyeOffsetY), mouseX - (faceX - eyeOffsetX));
-    var angleRightEye = Math.atan2(mouseY - (faceY - eyeOffsetY), mouseX - (faceX + eyeOffsetX));
-    var leftPupilX = (faceX - eyeOffsetX) + Math.cos(angleLeftEye) * pupilOffset;
-    var leftPupilY = (faceY - eyeOffsetY) + Math.sin(angleLeftEye) * pupilOffset;
-    var rightPupilX = (faceX + eyeOffsetX) + Math.cos(angleRightEye) * pupilOffset;
-    var rightPupilY = (faceY - eyeOffsetY) + Math.sin(angleRightEye) * pupilOffset;
+  function calculateEyeAngles(x, y) {
+    var angleLeft = Math.atan2(
+      y - (faceY - eyeOffsetY),
+      x - (faceX - eyeOffsetX)
+    );
+    var angleRight = Math.atan2(
+      y - (faceY - eyeOffsetY),
+      x - (faceX + eyeOffsetX)
+    );
+    return { left: angleLeft, right: angleRight };
+  }
 
-    // Draw eyes
+  function drawEyes() {
     ctx.fillStyle = "#FFF";
     ctx.beginPath();
     ctx.arc(faceX - eyeOffsetX, faceY - eyeOffsetY, eyeRadius, 0, Math.PI * 2);
@@ -49,8 +65,16 @@
     ctx.beginPath();
     ctx.arc(faceX + eyeOffsetX, faceY - eyeOffsetY, eyeRadius, 0, Math.PI * 2);
     ctx.fill();
+  }
 
-    // Draw pupils
+  function drawPupils(angleLeftEye, angleRightEye) {
+    var leftPupilX = faceX - eyeOffsetX + Math.cos(angleLeftEye) * pupilOffset;
+    var leftPupilY = faceY - eyeOffsetY + Math.sin(angleLeftEye) * pupilOffset;
+    var rightPupilX =
+      faceX + eyeOffsetX + Math.cos(angleRightEye) * pupilOffset;
+    var rightPupilY =
+      faceY - eyeOffsetY + Math.sin(angleRightEye) * pupilOffset;
+
     ctx.fillStyle = "#000";
     ctx.beginPath();
     ctx.arc(leftPupilX, leftPupilY, pupilRadius, 0, Math.PI * 2);
@@ -59,7 +83,7 @@
     ctx.arc(rightPupilX, rightPupilY, pupilRadius, 0, Math.PI * 2);
     ctx.fill();
 
-    // Draw eye highlights
+    // Eye highlights
     ctx.fillStyle = "#FFF";
     ctx.beginPath();
     ctx.arc(leftPupilX - 3, leftPupilY - 3, 3, 0, Math.PI * 2);
@@ -67,91 +91,79 @@
     ctx.beginPath();
     ctx.arc(rightPupilX - 3, rightPupilY - 3, 3, 0, Math.PI * 2);
     ctx.fill();
+  }
 
-    // Animate mouth vertical position and curve shape
-    currentMouthY += (targetMouthY - currentMouthY) * 0.1;
-    currentCurve += (targetCurve - currentCurve) * 0.1;
-
+  function drawMouth() {
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 5;
     ctx.beginPath();
-    if (faceState === "smile" || faceState === "confused") {
-      ctx.moveTo(faceX - 50, currentMouthY);
-      ctx.quadraticCurveTo(faceX, currentMouthY + currentCurve, faceX + 50, currentMouthY);
-    } else if (faceState === "surprised") {
-      ctx.arc(faceX, currentMouthY, 20, 0, Math.PI * 2, true);
-    } else if (faceState === "closed") {
-      // Draw a straight line for closed mouth.
-      ctx.moveTo(faceX - 30, currentMouthY);
-      ctx.lineTo(faceX + 30, currentMouthY);
-    }
+    ctx.moveTo(faceX - 50, currentMouthY);
+    ctx.quadraticCurveTo(
+      faceX,
+      currentMouthY + currentCurve,
+      faceX + 50,
+      currentMouthY
+    );
     ctx.stroke();
+  }
 
-    // If in confused state and bubble is active, draw question mark bubble
-    if (faceState === "confused" && showBubble) {
-      ctx.fillStyle = "#FFF";
-      ctx.strokeStyle = "#FFF";
-      ctx.lineWidth = 2;
-      // Draw bubble circle near the top-right of the head.
-      var bubbleX = faceX + faceRadius * 0.8;
-      var bubbleY = faceY - faceRadius * 0.8;
-      ctx.beginPath();
-      ctx.arc(bubbleX, bubbleY, 20, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      // Draw the question mark text in the bubble.
-      ctx.fillStyle = "#000";
-      ctx.font = "20px sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("?", bubbleX, bubbleY);
-    }
+  function drawBubble() {
+    ctx.fillStyle = "#FFF";
+    ctx.beginPath();
+    ctx.arc(faceX, faceY - faceRadius - 50, 50, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#000";
+    ctx.font = "16px Arial";
+    ctx.fillText("?", faceX - 5, faceY - faceRadius - 45);
+  }
+
+  function updateMouth() {
+    var speed = 0.1;
+    currentMouthY += (targetMouthY - currentMouthY) * speed;
+    currentCurve += (targetCurve - currentCurve) * speed;
+  }
+
+  function animate() {
+    updateMouth();
+    drawFace(mouseX, mouseY);
+    requestAnimationFrame(animate);
+  }
+
+  function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
 
   window.addEventListener("resize", function () {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    initCanvas();
     faceX = canvas.width / 2;
     faceY = canvas.height / 2;
   });
 
   // Updated mousemove handler using smooth transition if not already transitioning
   window.addEventListener("mousemove", function (event) {
-    var dx = event.clientX - faceX;
-    var dy = event.clientY - faceY;
-    var distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < faceRadius) {
-      faceState = "confused";
-      targetMouthY = faceY + 20;
-      targetCurve = 0;
-      showBubble = true;
-    } else {
-      faceState = "smile";
-      targetMouthY = faceY + 20;
-      targetCurve = 40;
-      showBubble = false;
-    }
-    drawFace(event.clientX, event.clientY);
+    mouseX = event.clientX;
+    mouseY = event.clientY;
   });
 
   // Updated click handler to trigger smooth transition for surprised state
   window.addEventListener("click", function () {
-    faceState = "surprised";
-    targetMouthY = faceY + 20;
-    drawFace(faceX, faceY);
+    faceState = faceState === "surprised" ? "smile" : "surprised";
+    if (faceState === "surprised") {
+      targetMouthY = faceY + 40;
+      targetCurve = 80;
+    } else {
+      targetMouthY = faceY + 20;
+      targetCurve = 40;
+    }
   });
 
   window.addEventListener("load", function () {
     setTimeout(function () {
-      document.getElementById("preloader").style.display = "none";
+      var preloader = document.getElementById("preloader");
+      if (preloader) preloader.style.display = "none";
     }, 500);
-    drawFace(faceX, faceY);
   });
 
-  // Animate the face continuously
-  function animate() {
-    drawFace(faceX, faceY);
-    requestAnimationFrame(animate);
-  }
   animate();
 })();
