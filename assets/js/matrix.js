@@ -17,7 +17,7 @@
   }
 
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.06)"; // Reduce opacity to reduce repaints
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#0F0";
     ctx.font = fontSize + "px monospace";
@@ -36,7 +36,7 @@
     }
   }
 
-  setInterval(draw, 200); // Further increase interval to reduce CPU usage
+  setInterval(draw, 10); // Increase interval to reduce CPU usage
 
   window.addEventListener("resize", function () {
     canvas.width = window.innerWidth;
