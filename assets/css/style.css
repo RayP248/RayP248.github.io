@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f0f0f0;
+    background: #000;
+    color: #fff;
     margin: 0;
     padding: 0;
 }
@@ -16,7 +17,7 @@ body {
     display: none;
 }
 
-#matrix {
+#matrix, #cube, #classic, #face {
     position: fixed;
     top: 0;
     left: 0;
@@ -35,14 +36,14 @@ header {
 #intro {
     text-align: center;
     padding: 40px 20px;
-    color: #333;
+    color: #fff;
     background-repeat: repeat;
 }
 
 .container {
     position: relative;
     z-index: 1;
-    overflow: hidden;
+    overflow: visible;
 }
 
 #projects {
@@ -53,15 +54,22 @@ header {
 }
 
 .project-card {
-    background: #fff;
+    background: #333;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 10px;
     padding: 20px;
     width: 300px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .project-card h2 {
     margin-top: 0;
+}
+
+.dropdown-menu {
+    z-index: 1001;
+    background: #333;
+    color: #fff;
 }
