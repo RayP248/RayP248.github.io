@@ -35,12 +35,7 @@
     requestAnimationFrame(animate);
   }
 
+  initCanvas();
   requestAnimationFrame(animate);
   window.addEventListener("resize", initCanvas);
-  window.addEventListener("load", function () {
-    setTimeout(function () {
-      document.getElementById("preloader").style.display = "none";
-    }, 500);
-    initCanvas();
-  });
 })();
