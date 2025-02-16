@@ -1,35 +1,44 @@
 (function () {
-  // Canvas initialization and global variables
   var canvas = document.getElementById("face");
   var ctx = canvas.getContext("2d");
-  initCanvas();
-
-  var faceX = canvas.width / 2;
-  var faceY = canvas.height / 2;
-  var faceRadius = 100;
-  var eyeRadius = 20;
-  var eyeOffsetX = 40;
-  var eyeOffsetY = 30;
-  var pupilRadius = 10;
-  var pupilOffset = 10;
-
-  var faceState = "smile"; // initial state
-  var targetMouthY = faceY + 20;
-  var currentMouthY = faceY + 20;
-  var currentCurve = 40;
-  var targetCurve = 40;
-  // Bubble flag for confused face
+  var faceX,
+    faceY,
+    faceRadius,
+    eyeRadius,
+    eyeOffsetX,
+    eyeOffsetY,
+    pupilRadius,
+    pupilOffset;
+  var faceState = "smile";
+  var targetMouthY, currentMouthY, currentCurve, targetCurve;
   var showBubble = false;
-  // Global mouse coordinates, starting at face center.
-  var mouseX = faceX,
-    mouseY = faceY;
+  var mouseX, mouseY;
 
-  // In drawFace(), handle the "closed" state explicitly.
+  function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    faceX = canvas.width / 2;
+    faceY = canvas.height / 2;
+    faceRadius = Math.min(canvas.width, canvas.height) / 6;
+    eyeRadius = faceRadius / 5;
+    eyeOffsetX = faceRadius / 2;
+    eyeOffsetY = faceRadius / 3;
+    pupilRadius = eyeRadius / 2;
+    pupilOffset = eyeRadius / 2;
+    targetMouthY = faceY + faceRadius / 2;
+    currentMouthY = targetMouthY;
+    currentCurve = faceRadius / 2;
+    targetCurve = currentCurve;
+    mouseX = faceX;
+    mouseY = faceY;
+  }
+
   function drawFace(x, y) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     drawFaceCircle();
     var angles = calculateEyeAngles(x, y);
     drawEyes();
@@ -74,7 +83,6 @@
       faceX + eyeOffsetX + Math.cos(angleRightEye) * pupilOffset;
     var rightPupilY =
       faceY - eyeOffsetY + Math.sin(angleRightEye) * pupilOffset;
-
     ctx.fillStyle = "#000";
     ctx.beginPath();
     ctx.arc(leftPupilX, leftPupilY, pupilRadius, 0, Math.PI * 2);
@@ -82,8 +90,6 @@
     ctx.beginPath();
     ctx.arc(rightPupilX, rightPupilY, pupilRadius, 0, Math.PI * 2);
     ctx.fill();
-
-    // Eye highlights
     ctx.fillStyle = "#FFF";
     ctx.beginPath();
     ctx.arc(leftPupilX - 3, leftPupilY - 3, 3, 0, Math.PI * 2);
@@ -97,11 +103,11 @@
     ctx.strokeStyle = "#000";
     ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.moveTo(faceX - 50, currentMouthY);
+    ctx.moveTo(faceX - faceRadius / 2, currentMouthY);
     ctx.quadraticCurveTo(
       faceX,
       currentMouthY + currentCurve,
-      faceX + 50,
+      faceX + faceRadius / 2,
       currentMouthY
     );
     ctx.stroke();
@@ -129,40 +135,27 @@
     requestAnimationFrame(animate);
   }
 
-  function initCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  window.addEventListener("resize", function () {
-    initCanvas();
-    faceX = canvas.width / 2;
-    faceY = canvas.height / 2;
-  });
-
-  // Updated mousemove handler using smooth transition if not already transitioning
+  window.addEventListener("resize", initCanvas);
   window.addEventListener("mousemove", function (event) {
     mouseX = event.clientX;
     mouseY = event.clientY;
   });
-
-  // Updated click handler to trigger smooth transition for surprised state
   window.addEventListener("click", function () {
     faceState = faceState === "surprised" ? "smile" : "surprised";
     if (faceState === "surprised") {
-      targetMouthY = faceY + 40;
-      targetCurve = 80;
+      targetMouthY = faceY + faceRadius / 1.5;
+      targetCurve = faceRadius;
     } else {
-      targetMouthY = faceY + 20;
-      targetCurve = 40;
+      targetMouthY = faceY + faceRadius / 2;
+      targetCurve = faceRadius / 2;
     }
   });
-
   window.addEventListener("load", function () {
     setTimeout(function () {
       var preloader = document.getElementById("preloader");
       if (preloader) preloader.style.display = "none";
     }, 500);
+    initCanvas();
   });
 
   animate();

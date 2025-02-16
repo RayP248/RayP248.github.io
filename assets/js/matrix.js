@@ -1,24 +1,25 @@
 (function () {
   var canvas = document.getElementById("matrix");
   var ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  ctx.fillStyle = "#000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  var chars = "01".split("");
   var fontSize = 30;
-  var columns = canvas.width / fontSize;
-  var drops = [];
-  for (var x = 0; x < columns; x++) {
-    drops[x] = 1;
+  var columns, drops;
+
+  function initCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    columns = Math.floor(canvas.width / fontSize);
+    drops = Array(columns).fill(1);
   }
+
   function draw() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#0F0";
     ctx.font = fontSize + "px monospace";
     for (var i = 0; i < drops.length; i++) {
-      var text = chars[Math.floor(Math.random() * chars.length)];
+      var text = "01"[Math.floor(Math.random() * 2)];
       var x = i * fontSize;
       var y = drops[i] * fontSize;
       ctx.fillText(text, x, y);
@@ -28,19 +29,18 @@
       drops[i]++;
     }
   }
-  setInterval(draw, 10);
-  window.addEventListener("resize", function () {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    columns = canvas.width / fontSize;
-    drops = [];
-    for (var x = 0; x < columns; x++) {
-      drops[x] = 1;
-    }
-  });
+
+  function animate() {
+    draw();
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+  window.addEventListener("resize", initCanvas);
   window.addEventListener("load", function () {
     setTimeout(function () {
       document.getElementById("preloader").style.display = "none";
     }, 500);
+    initCanvas();
   });
 })();

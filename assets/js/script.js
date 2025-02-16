@@ -1,4 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", initSmoothScroll);
+
+function initSmoothScroll() {
   document.querySelectorAll("a.nav-link").forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -8,4 +10,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-});
+}

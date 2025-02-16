@@ -6,8 +6,7 @@
   const ctx = canvas.getContext("2d");
   let angleX = 0;
   let angleY = 0;
-  const size = 150;
-  const fov = 256; // Field of view for perspective projection
+  let size, fov;
 
   // Define cube vertices
   const points = [
@@ -41,6 +40,10 @@
   const initCanvas = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    size = Math.min(canvas.width, canvas.height) / 4;
+    fov = size * 2;
   };
 
   // Rotate and project a 3D point into 2D space with perspective
@@ -84,9 +87,13 @@
     });
     ctx.stroke();
 
+    updateAngles();
+  };
+
+  function updateAngles() {
     angleX += 0.01;
     angleY += 0.01;
-  };
+  }
 
   // Render loop using requestAnimationFrame for smooth animations
   const animate = () => {
@@ -101,6 +108,7 @@
       const preloader = document.getElementById("preloader");
       if (preloader) preloader.style.display = "none";
     }, 500);
+    initCanvas();
   });
 
   // Initialize and start animation
