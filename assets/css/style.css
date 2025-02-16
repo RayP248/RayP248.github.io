@@ -121,3 +121,7 @@ section {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-5px);
 }
+
+.bg-brunette {
+    background-color: rgb(40, 23, 41) !important;
+}

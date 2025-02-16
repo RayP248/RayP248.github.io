@@ -73,7 +73,8 @@
 
     const projected = points.map(rotateAndProject);
 
-    ctx.strokeStyle = "#FFF";
+    // Update stroke style to gray
+    ctx.strokeStyle = "#808080";
     ctx.lineWidth = 2;
     ctx.beginPath();
 

@@ -35,7 +35,7 @@
     requestAnimationFrame(animate);
   }
 
-  initCanvas();
   requestAnimationFrame(animate);
+  initCanvas();
   window.addEventListener("resize", initCanvas);
 })();
